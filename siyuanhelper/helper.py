@@ -104,3 +104,10 @@ async def export_md_content(id: str) -> str:
     result = await post(API_URL + "export/exportMdContent", id=id)
     if result["code"] == 0:
         return result["data"]["content"]
+
+
+async def updateBlock(id: str, dataType: str, data: str):
+    result = await post(API_URL + "block/updateBlock", dataType=dataType, data=data, id=id)
+    if result["code"] == 0:
+        return result["data"]
+    raise ApiException(result)
