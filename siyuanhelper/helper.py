@@ -5,6 +5,7 @@ import aiohttp
 API_URL = "http://127.0.0.1:6806/api/"
 HEADERS = {"Content-Type": "application/json"}
 TOKEN = ""
+SESSION = None
 
 
 def set_token(token):
@@ -15,10 +16,14 @@ def set_token(token):
     HEADERS["Authorization"] = "Token " + TOKEN
 
 
+def set_session(session):
+    global SESSION
+    SESSION = session
+
+
 async def post(url: str, **params):
-    async with aiohttp.ClientSession() as session:
-        async with session.post(url=url, json=params, headers=HEADERS) as resp:
-            return await resp.json()
+    async with SESSION.post(url=url, json=params, headers=HEADERS) as resp:
+        return await resp.json()
 
 
 class ApiException(Exception):
