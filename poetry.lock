@@ -569,6 +569,13 @@ description = "Run all your asynchronous tests cooperatively."
 category = "dev"
 optional = false
 python-versions = ">=3.7"
+develop = false
+
+[package.source]
+type = "git"
+url = "https://github.com/willemt/pytest-asyncio-cooperative.git"
+reference = "master"
+resolved_reference = "cf2b330b0708b97ace41ad0c1aec8c2d69e24c12"
 
 [[package]]
 name = "pytest-benchmark"
@@ -752,7 +759,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7"
-content-hash = "d226cf7f4662a5cce7598482eb97e81856cb41c600e157cc7c6097aed4c1b118"
+content-hash = "6a56fb9a772db9c0d4a4d22077c42533382ed22c4127391bcbdf6beaf89209b7"
 
 [metadata.files]
 aiohttp = [
@@ -1236,10 +1243,7 @@ pytest = [
     {file = "pytest-7.1.2-py3-none-any.whl", hash = "sha256:13d0e3ccfc2b6e26be000cb6568c832ba67ba32e719443bfe725814d3c42433c"},
     {file = "pytest-7.1.2.tar.gz", hash = "sha256:a06a0425453864a270bc45e71f783330a7428defb4230fb5e6a731fde06ecd45"},
 ]
-pytest-asyncio-cooperative = [
-    {file = "pytest-asyncio-cooperative-0.26.0.tar.gz", hash = "sha256:698edc8fffea15ae6cc40b63e8f8f95e0c02b9d09b6a9f272f4b8fc1769792fe"},
-    {file = "pytest_asyncio_cooperative-0.26.0-py3-none-any.whl", hash = "sha256:af36d33eb8337c2e1fc85488ec295ae15c899dc52ce13b061e1e1ba79ec18446"},
-]
+pytest-asyncio-cooperative = []
 pytest-benchmark = [
     {file = "pytest-benchmark-3.4.1.tar.gz", hash = "sha256:40e263f912de5a81d891619032983557d62a3d85843f9a9f30b98baea0cd7b47"},
     {file = "pytest_benchmark-3.4.1-py2.py3-none-any.whl", hash = "sha256:36d2b08c4882f6f997fd3126a3d6dfd70f3249cde178ed8bbc0b73db7c20f809"},

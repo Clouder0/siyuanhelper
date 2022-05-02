@@ -2,17 +2,18 @@
 from __future__ import annotations
 
 import dataclasses
+import sys
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any
+from typing import Any, Optional, Union
 
 import aiohttp
 
 from siyuanhelper import exceptions
 
 
-data_type = dict | list | None
+data_type = Union[dict, list, None]
 
 
 class Siyuan:
@@ -225,7 +226,20 @@ block_fields = (
 )
 
 
-@dataclass(slots=True)
+if sys.version_info < (3, 10):
+
+    def dataclass_decorator(cls):
+        x = dataclass(cls)
+        x.__slots__ = block_fields
+        return x
+
+else:
+
+    def dataclass_decorator(cls):
+        return dataclass(cls, slots=True)
+
+
+@dataclass_decorator
 class RawSiyuanBlock:
     """Raw Siyuan Block, presents the raw output of the Siyuan API."""
 
