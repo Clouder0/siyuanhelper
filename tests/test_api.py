@@ -11,7 +11,7 @@ from siyuanhelper.api import DataType, RawSiyuanBlock, Siyuan
 
 @pytest.fixture
 async def siyuan():
-    my_siyuan = Siyuan()
+    my_siyuan = Siyuan(token="mhfj23ilil7bafg0")
     yield my_siyuan
     await my_siyuan.close()
 
@@ -53,6 +53,8 @@ class TestSiyuan:
         ret = await siyuan.get_attrs_by_id("20220501214630-ql8hhto")
         assert ret["custom-testattr"] == "value"
 
+    @pytest.mark.benchmark
+    @pytest.mark.longrun
     def test_benchmark_raw(self, benchmark):
         ret = {
             "alias": "",
@@ -82,6 +84,8 @@ class TestSiyuan:
 
         benchmark(init_raw)
 
+    @pytest.mark.benchmark
+    @pytest.mark.longrun
     def test_benchmark_filtered_raw(self, benchmark):
         ret = {
             "alias": "",
@@ -111,6 +115,14 @@ class TestSiyuan:
 
         benchmark(init_filtered_raw)
 
+    @pytest.mark.asyncio_cooperative
+    @pytest.mark.xfail
+    # this test would certainly fail until Siyuan v2.0.4 is released.
+    async def test_auth(self):
+        new_siyuan = Siyuan(token="invalid")
+        with pytest.raises(exceptions.SiyuanAuthFailedException):
+            await new_siyuan.sql_query("select * from blocks limit 0")
+
 
 class TestSiyuanBlock:
     @pytest.mark.asyncio_cooperative
@@ -130,6 +142,7 @@ class TestSiyuanBlock:
         await ret.pull()
         assert ret.content == "test block"
 
+    @pytest.mark.longrun
     @pytest.mark.asyncio_cooperative
     async def test_insert_delete(self, siyuan: Siyuan):
         ret = await siyuan.get_block_by_id("20220501134149-qexauwn")

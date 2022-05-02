@@ -2,11 +2,10 @@
 from __future__ import annotations
 
 import dataclasses
-import sys
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Optional, Union
+from typing import Any, Union
 
 import aiohttp
 
@@ -18,12 +17,6 @@ data_type = Union[dict, list, None]
 
 class Siyuan:
     """Siyuan Helper Instance."""
-
-    def _check_auth(self) -> bool:
-        """Check if the Authorization Token is valid."""
-        # TODO
-        # wait for issue https://github.com/siyuan-note/siyuan/issues/4753 to be solved.
-        return True
 
     def __init__(self, base_url: str = "http://127.0.0.1:6806", token: str = ""):
         """Init a Siyuan Helper.
@@ -44,8 +37,6 @@ class Siyuan:
                 "Content-Type": "application/json",
             },
         )
-        if not self._check_auth():
-            raise exceptions.SiyuanAuthFailedException(self)
 
     async def close(self) -> None:
         """Close Siyuan Helper Session, should be explicitly called after use."""
@@ -54,9 +45,12 @@ class Siyuan:
     async def _post(self, url: str, **params: Any) -> data_type:
         async with self.session.post(url=url, json=params) as resp:
             ret = SiyuanResponse(**(await resp.json()))
-            if ret.code != 0:
-                raise exceptions.SiyuanApiException(ret)
-            return ret.data
+            if ret.code == 0:
+                return ret.data
+            if ret.code == -1 and ret.msg == "Auth failed":
+                raise exceptions.SiyuanAuthFailedException((self, ret))
+            else:
+                raise exceptions.SiyuanApiException((self, ret))
 
     async def get_block_by_id(self, block_id: str, full: bool = True) -> SiyuanBlock:
         """Get SiyuanBlock by block id.
@@ -125,6 +119,8 @@ class Siyuan:
             data=data,
             previousID=previous_id,
         )
+        if ret is None:
+            raise exceptions.SiyuanApiException((self, ret))
         return await self.get_block_by_id(ret[0]["doOperations"][0]["id"], full=False)
 
 
@@ -226,22 +222,11 @@ block_fields = (
 )
 
 
-if sys.version_info < (3, 10):
-
-    def dataclass_decorator(cls):
-        x = dataclass(cls)
-        x.__slots__ = block_fields
-        return x
-
-else:
-
-    def dataclass_decorator(cls):
-        return dataclass(cls, slots=True)
-
-
-@dataclass_decorator
+@dataclass
 class RawSiyuanBlock:
     """Raw Siyuan Block, presents the raw output of the Siyuan API."""
+
+    __slots__ = block_fields
 
     id: str
     alias: str
