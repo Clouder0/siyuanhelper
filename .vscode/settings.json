@@ -1,0 +1,12 @@
+{
+  "python.linting.pycodestyleEnabled": false,
+  "python.linting.pydocstyleEnabled": true,
+  "python.linting.pylamaEnabled": false,
+  "python.linting.enabled": true,
+  "python.linting.flake8Enabled": true,
+  "python.linting.mypyEnabled": true,
+  "python.formatting.provider": "black",
+  "markdownlint.config": {
+    "MD033": false
+  }
+}
