@@ -1,0 +1,50 @@
+site_name: Siyuan Helper Docs
+site_url: http://127.0.0.1:8000
+repo_url: https://github.com/clouder0/siyuanhelper
+edit_uri: edit/main/docs/
+nav:
+  - Home: index.md
+  - Quickstart: quickstart.md
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+extra:
+  alternate:
+    - name: 简体中文
+      link: /zh/
+      lang: zh
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.top
+    - content.code.annotate
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/Clouder0/siyuanhelper
+plugins:
+  - search
+  - git-revision-date-localized
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - def_list
+  - pymdownx.tasklist:
+      custom_checkbox: true
