@@ -65,15 +65,40 @@ class Siyuan:
         if not full:
             return SiyuanBlock(id=block_id, source=self)
         return SiyuanBlock(
-            id=block_id, source=self, raw=await self.get_raw_block_by_id(block_id)
+            id=block_id, source=self, raw=await self._get_raw_block_by_id(block_id)
         )
 
-    async def get_raw_block_by_id(self, block_id: str) -> RawSiyuanBlock:
+    async def get_blocks_by_sql(
+        self, cond: str, full: bool = True
+    ) -> list[SiyuanBlock]:
+        """Get a list of SiyuanBlock by sql.
+
+        Args:
+            cond (str): the conditions to apply, typically `where id = ''` or so.
+            full (bool, optional): whether to fetch all the informations of the block. Defaults to True.
+
+        Returns:
+            list[SiyuanBlock]: result blocks
+        """
+        if not full:
+            ret = await self.sql_query(f"SELECT id from BLOCKS {cond}")
+            return [SiyuanBlock(id=x.id, source=self) for x in ret]
+        ret = await self.sql_query(f"SELECT * from BLOCKS {cond}")
+        return [
+            SiyuanBlock(id=x["id"], source=self, raw=self._gen_block_by_sql_result(x))
+            for x in ret
+        ]
+
+    def _gen_block_by_sql_result(self, result: dict) -> RawSiyuanBlock:
+        # use block_fields filter to avoid compatibility issues.
+        return RawSiyuanBlock(**{key: result[key] for key in block_fields})
+
+    async def _get_raw_block_by_id(self, block_id: str) -> RawSiyuanBlock:
         """Generally, you should not use this function unless you know what you're doing.
         Get RawSiyuanBlock by block id.
 
         Args:
-            block_id (_type_): the desired block id.
+            block_id (str): the desired block id.
 
         Returns:
             RawSiyuanBlock: raw Siyuan Block, with only data fields defined.
@@ -83,9 +108,7 @@ class Siyuan:
             raise exceptions.SiyuanApiTypeException(ret)
         if len(ret) == 0:
             raise exceptions.SiyuanNoResultException(ret)
-        datas: dict = ret[0]
-        # use block_fields filter to avoid compatibility issues.
-        return RawSiyuanBlock(**{key: datas[key] for key in block_fields})
+        return self._gen_block_by_sql_result(ret[0])
 
     async def get_attrs_by_id(self, block_id: str) -> dict[str, str]:
         """Get attribute dictionary by block id.
@@ -171,12 +194,12 @@ class SiyuanBlock:
         self.attrs = BlockAttr(self)
 
     async def pull(self) -> None:
-        self.raw = await self.source.get_raw_block_by_id(self.id)
+        self.raw = await self.source._get_raw_block_by_id(self.id)
         await self.attrs._cache_attr()
 
     async def ensure(self) -> None:
         if self.raw is None:
-            self.raw = await self.source.get_raw_block_by_id(self.id)
+            self.raw = await self.source._get_raw_block_by_id(self.id)
         await self.attrs.ensure()
 
     def asdict(self) -> dict:
@@ -222,7 +245,7 @@ block_fields = (
 )
 
 
-@dataclass
+@dataclass(frozen=True)
 class RawSiyuanBlock:
     """Raw Siyuan Block, presents the raw output of the Siyuan API."""
 

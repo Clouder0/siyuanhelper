@@ -6,7 +6,7 @@ import pytest
 import siyuanhelper.api
 
 from siyuanhelper import exceptions
-from siyuanhelper.api import DataType, RawSiyuanBlock, Siyuan
+from siyuanhelper.api import DataType, RawSiyuanBlock, Siyuan, SiyuanBlock
 
 
 @pytest.fixture
@@ -45,7 +45,7 @@ class TestSiyuan:
 
     @pytest.mark.asyncio_cooperative
     async def test_get_raw_block_by_id(self, siyuan: Siyuan):
-        ret = await siyuan.get_raw_block_by_id("20220501134149-qexauwn")
+        ret = await siyuan._get_raw_block_by_id("20220501134149-qexauwn")
         assert ret.id == "20220501134149-qexauwn"
 
     @pytest.mark.asyncio_cooperative
@@ -122,6 +122,19 @@ class TestSiyuan:
         new_siyuan = Siyuan(token="invalid")
         with pytest.raises(exceptions.SiyuanAuthFailedException):
             await new_siyuan.sql_query("select * from blocks limit 0")
+
+    @pytest.mark.asyncio_cooperative
+    async def test_get_blocks_by_sql(self, siyuan: Siyuan):
+        blocks: list[SiyuanBlock] = await siyuan.get_blocks_by_sql(
+            "WHERE (id='20220501134149-qexauwn') or (id='20220501134156-v82db6e')"
+        )
+        assert (
+            blocks[0].id == "20220501134149-qexauwn"
+            and blocks[1].id == "20220501134156-v82db6e"
+        ) or (
+            blocks[1].id == "20220501134149-qexauwn"
+            and blocks[0].id == "20220501134156-v82db6e"
+        )
 
 
 class TestSiyuanBlock:
