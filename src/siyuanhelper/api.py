@@ -153,7 +153,7 @@ class SiyuanResponse:
 
     code: int
     msg: str
-    data: data_type
+    data: data_type = None
 
 
 class BlockAttr:

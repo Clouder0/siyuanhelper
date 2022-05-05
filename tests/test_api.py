@@ -116,8 +116,6 @@ class TestSiyuan:
         benchmark(init_filtered_raw)
 
     @pytest.mark.asyncio_cooperative
-    @pytest.mark.xfail
-    # this test would certainly fail until Siyuan v2.0.4 is released.
     async def test_auth(self):
         new_siyuan = Siyuan(token="invalid")
         with pytest.raises(exceptions.SiyuanAuthFailedException):
