@@ -10,4 +10,14 @@
          <lastmod>2022-05-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
+    <url>
+         <loc>http://127.0.0.1:8000/zh/</loc>
+         <lastmod>2022-05-06</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>http://127.0.0.1:8000/zh/quickstart/</loc>
+         <lastmod>2022-05-06</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
 </urlset>
