@@ -4,7 +4,7 @@
   <p align="center">
     The Helper Lib for Siyuan Note.
     <br />
-    <a href="https://github.com/Clouder0/siyuanhelper"><strong>Explore the docs »</strong></a>
+    <a href="https://clouder0.github.io/siyuanhelper/"><strong>Explore the docs »</strong></a>
   </p>
 </div>
 
@@ -45,32 +45,33 @@
 <!-- INTRODUCTION -->
 ## 💡 Introduction
 
-**Unfortunately, siyuanhelper is still under initial development and hasn't been prepared for users.**  
-**Please wait until version 0.1.0 is published.**  
+Siyuan Helper is a python API wrapper for [Siyuan Note](https://github.com/siyuan-note/siyuan).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ## ✨ Features
 
+- Aysnc
+- Object Oriented
+- Type Annotated
+- Fully Documented
+
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ## 🎏 Getting Started
 
-<details> <summary>Click Here to Get Started Instantly.</summary>
+See our [Quickstart](https://clouder0.github.io/siyuanhelper/quickstart/) to get hands on experience.
 
-TODO.
-
-</details>
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 ## 🗺️ Roadmap
 
-Please check out our [Github Project](https://github.com/users/Clouder0/projects/2).
+Please check out our [Github Project](https://github.com/Clouder0/siyuanhelper/projects/1).
 
 See the [open issues](https://github.com/Clouder0/siyuanhelper/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-<!-- FAQ -->
 ## ❓ FAQ
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -89,7 +90,7 @@ Don't forget to give the project a star! Thanks again!
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-Don't forget to see our [Contributing Guideline](https://github.com/Clouder0/siyuanhelper/blob/main/CONTRIBUTING.md) for details.
+Don't forget to see our [Contributing Guidelines](https://github.com/Clouder0/siyuanhelper/blob/main/CONTRIBUTING.md) for details.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -97,12 +98,7 @@ Don't forget to see our [Contributing Guideline](https://github.com/Clouder0/siy
 
 There are various open source projects that siyuanhelper depends on, without which this tool wouldn't exist. Credits to them!
 
-<details> <summary>List</summary>
-
-- [Dynaconf](https://github.com/rochacbruno/dynaconf), MIT License
 - [aiohttp](https://github.com/aio-libs/aiohttp), Apache License 2.0
-
-</details>
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
