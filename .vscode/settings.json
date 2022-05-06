@@ -9,8 +9,5 @@
   "markdownlint.config": {
     "MD033": false,
     "MD046": false
-  },
-  "yaml.schemas": {
-    "https://squidfunk.github.io/mkdocs-material/schema.json": "mkdocs.yml"
   }
 }

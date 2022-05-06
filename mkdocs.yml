@@ -19,10 +19,6 @@ theme:
         icon: material/toggle-switch
         name: Switch to light mode
 extra:
-  alternate:
-    - name: 简体中文
-      link: /zh/
-      lang: zh
   features:
     - navigation.instant
     - navigation.tracking
@@ -36,6 +32,15 @@ extra:
       link: https://github.com/Clouder0/siyuanhelper
 plugins:
   - search
+  - i18n:
+      default_language: en
+      languages:
+        en:
+          name: English
+          build: true
+        zh:
+          name: Chinese
+          build: true
   - git-revision-date-localized
 markdown_extensions:
   - admonition
