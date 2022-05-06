@@ -94,8 +94,7 @@ class Siyuan:
         return RawSiyuanBlock(**{key: result[key] for key in block_fields})
 
     async def _get_raw_block_by_id(self, block_id: str) -> RawSiyuanBlock:
-        """Generally, you should not use this function unless you know what you're doing.
-        Get RawSiyuanBlock by block id.
+        """Generally, you should not use this function unless you know what you're doing. Get RawSiyuanBlock by block id.
 
         Args:
             block_id (str): the desired block id.
@@ -125,17 +124,49 @@ class Siyuan:
         return ret
 
     async def set_attrs_by_id(self, block_id: str, attrs: dict[str, str]) -> None:
+        """Update the attributes of the block with given id. Won't delete attrs not given in the dict.
+
+        Args:
+            block_id (str): target block id
+            attrs (dict[str, str]): block attrs dict to update
+        """
         await self._post("/api/attr/setBlockAttrs", id=block_id, attrs=attrs)
 
     async def sql_query(self, sql: str) -> data_type:
+        """Query SQL.
+
+        Args:
+            sql (str): the executed SQL string
+
+        Returns:
+            data_type: usually a list of dicts.
+        """
         return await self._post(url="/api/query/sql", stmt=sql)
 
     async def delete_block_by_id(self, block_id: str) -> None:
+        """Delete a block with given id.
+
+        Args:
+            block_id (str): target block id
+        """
         await self._post("/api/block/deleteBlock", id=block_id)
 
     async def insert_block(
         self, data_type: DataType, data: str, previous_id: str
     ) -> SiyuanBlock:
+        """Insert a block after the block with the given id.
+
+        Args:
+            data_type (DataType): markdown or dom
+            data (str): data value
+            previous_id (str): the block in front of the new block
+
+        Raises:
+            exceptions.SiyuanApiException: API Error
+
+        Returns:
+            SiyuanBlock: the new block, with id only.
+        """
         ret = await self._post(
             "/api/block/insertBlock",
             dataType=data_type,
@@ -157,7 +188,14 @@ class SiyuanResponse:
 
 
 class BlockAttr:
+    """Block Attribute Class."""
+
     def __init__(self, block: SiyuanBlock):
+        """Init.
+
+        Args:
+            block (SiyuanBlock): block that this BlockAttr adhere to.
+        """
         self.block = block
         self.cached = False
 
@@ -166,20 +204,37 @@ class BlockAttr:
         self.cached = True
 
     async def ensure(self) -> None:
+        """Ensure the attributes are cached."""
         if not self.cached:
             await self._cache_attr()
 
     async def get(self, name: str) -> str:
+        """Get attribute value by name.
+
+        Args:
+            name (str): name of the attribute, remember to add `custom-`
+
+        Returns:
+            str: the value of the attribute, `` if none.
+        """
         await self.ensure()
         return self.values.get(name, "")
 
     async def set(self, name: str, val: str) -> None:
+        """Modify the attribute.
+
+        Args:
+            name (str): name of the attribute
+            val (str): new value
+        """
         await self.ensure()
         self.values[name] = val
         await self.block.source.set_attrs_by_id(self.block.id, {name: val})
 
 
 class DataType(str, Enum):
+    """DataType Enum, used when modifying block's content."""
+
     MARKDOWN = "markdown"
     DOM = "dom"
 
@@ -188,16 +243,25 @@ class SiyuanBlock:
     """Block Class for Siyuan. An additional application layer is applied. For raw data, consider RawSiyuanBlock."""
 
     def __init__(self, id: str, source: Siyuan, raw: RawSiyuanBlock | None = None):
+        """Init a SiyuanBlock.
+
+        Args:
+            id (str): id of the block.
+            source (Siyuan): source of the block.
+            raw (RawSiyuanBlock | None, optional): raw block data. Defaults to None.
+        """
         self.id = id
         self.source = source
         self.raw = raw
         self.attrs = BlockAttr(self)
 
     async def pull(self) -> None:
+        """Pull from Siyuan API. Refreshing everything."""
         self.raw = await self.source._get_raw_block_by_id(self.id)
         await self.attrs._cache_attr()
 
     async def ensure(self) -> None:
+        """Ensure the information of the current block is cached."""
         if self.raw is None:
             self.raw = await self.source._get_raw_block_by_id(self.id)
         await self.attrs.ensure()
@@ -211,13 +275,31 @@ class SiyuanBlock:
         return dataclasses.asdict(self.raw)
 
     def __getattr__(self, __name: str) -> Any:
+        """Expose RawSiyuanBlock's attributes.
+
+        Args:
+            __name (str): attribute name
+
+        Returns:
+            Any: result
+        """
         if self.raw is not None and __name in self.raw.__slots__:  # type: ignore
             return self.raw.__getattribute__(__name)
 
     async def delete(self) -> None:
+        """Delete this block. Mind that there is a delay between the execution and the result being synced into API database."""
         await self.source.delete_block_by_id(self.id)
 
     async def insert(self, data_type: DataType, data: str) -> SiyuanBlock:
+        """Insert a block after this block.
+
+        Args:
+            data_type (DataType): markdown or dom
+            data (str): the desired data
+
+        Returns:
+            SiyuanBlock: newly inserted block, only `id` is given.
+        """
         return await self.source.insert_block(data_type, data, self.id)
 
 
