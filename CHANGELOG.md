@@ -10,6 +10,22 @@ Nothing here.
 
 Huge refactor. Brand new start.
 
+### Added
+
+- Siyuan API Class
+- SiyuanBlock Class
+- BlockAttr Class
+- Document using Mkdocs and Mkdocs-Material
+- Development
+  - Poetry for Managing Project
+  - Mypy for Type Annotations
+  - Pre-Commit Check
+  - Tox Autonamted Testing
+  - Pytest
+  - Flake8
+  - Black for Code Style
+  - isort for Import Sorting
+
 ## TEMPLATE
 
 ### Added
