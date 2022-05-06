@@ -18,6 +18,8 @@ classifiers = [
     "Topic :: Utilities",
     "Typing :: Typed"
 ]
+readme = "README.md"
+documentation = "https://clouder0.github.io/siyuanhelper"
 
 [tool.poetry.dependencies]
 python = ">=3.8, < 4.0"
