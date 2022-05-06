@@ -1,23 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
     <url>
          <loc>http://127.0.0.1:8000/</loc>
          <lastmod>2022-05-06</lastmod>
          <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8000/en/"/>
+         <xhtml:link rel="alternate" hreflang="zh" href="http://127.0.0.1:8000/zh/"/>
+         
     </url>
     <url>
          <loc>http://127.0.0.1:8000/quickstart/</loc>
          <lastmod>2022-05-06</lastmod>
          <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>http://127.0.0.1:8000/zh/</loc>
-         <lastmod>2022-05-06</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>http://127.0.0.1:8000/zh/quickstart/</loc>
-         <lastmod>2022-05-06</lastmod>
-         <changefreq>daily</changefreq>
+         <xhtml:link rel="alternate" hreflang="en" href="http://127.0.0.1:8000/en/quickstart/"/>
+         <xhtml:link rel="alternate" hreflang="zh" href="http://127.0.0.1:8000/zh/quickstart/"/>
+         
     </url>
 </urlset>
