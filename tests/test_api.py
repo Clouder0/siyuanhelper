@@ -166,6 +166,15 @@ class TestSiyuanBlock:
         with pytest.raises(exceptions.SiyuanNoResultException):
             await siyuan.get_block_by_id(inserted.id)
 
+    @pytest.mark.asyncio_cooperative
+    async def test_export(self, siyuan: Siyuan):
+        block = await siyuan.get_block_by_id("20220507183011-c3lt1k8")
+        ret = await block.export()
+        assert (
+            ret
+            == "**content1**\n\n*content2*\n\n## Header 2\n\ncontent 3\n\ncontent 4\n"
+        )
+
 
 class TestBlockAttr:
     @pytest.mark.asyncio_cooperative

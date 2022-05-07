@@ -4,7 +4,7 @@ See [keep-a-changelog](https://github.com/olivierlacan/keep-a-changelog).
 
 ## Unreleased
 
-Nothing here.
+- Export Markdown Content
 
 ## v0.1.0
 

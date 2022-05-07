@@ -5,7 +5,7 @@ import dataclasses
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Union
+from typing import Any, Union, cast
 
 import aiohttp
 
@@ -177,6 +177,19 @@ class Siyuan:
             raise exceptions.SiyuanApiException((self, ret))
         return await self.get_block_by_id(ret[0]["doOperations"][0]["id"], full=False)
 
+    async def export_md_content_by_id(self, block_id: str) -> str:
+        """Export Markdown Content by id.
+
+        Args:
+            block_id (str): blockid, only document block is supported.
+
+        Returns:
+            str: markdown
+        """
+        return cast(dict, await self._post("/api/export/exportMdContent", id=block_id))[
+            "content"
+        ]
+
 
 @dataclass
 class SiyuanResponse:
@@ -301,6 +314,14 @@ class SiyuanBlock:
             SiyuanBlock: newly inserted block, only `id` is given.
         """
         return await self.source.insert_block(data_type, data, self.id)
+
+    async def export(self) -> str:
+        """Export the document current block belongs to in markdown format.
+
+        Returns:
+            str: markdown export output
+        """
+        return await self.source.export_md_content_by_id(self.id)
 
 
 block_fields = (
