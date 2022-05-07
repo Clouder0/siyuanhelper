@@ -4,6 +4,10 @@ See [keep-a-changelog](https://github.com/olivierlacan/keep-a-changelog).
 
 Version numbers follow [semantic versioning](https://semver.org).
 
+## Unreleased
+
+- support default value in BlockAttr.get()
+
 ## v0.2.0
 
 ### Added

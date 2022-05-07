@@ -221,17 +221,18 @@ class BlockAttr:
         if not self.cached:
             await self._cache_attr()
 
-    async def get(self, name: str) -> str:
+    async def get(self, name: str, default: str = "") -> str:
         """Get attribute value by name.
 
         Args:
             name (str): name of the attribute, remember to add `custom-`
+            default (str, optional): the return value if no attribute is found, defaults to ""
 
         Returns:
-            str: the value of the attribute, `` if none.
+            str: the value of the attribute, default if not found.
         """
         await self.ensure()
-        return self.values.get(name, "")
+        return self.values.get(name, default)
 
     async def set(self, name: str, val: str) -> None:
         """Modify the attribute.

@@ -198,3 +198,9 @@ class TestBlockAttr:
         assert ret.attrs.cached is False
         await ret.attrs._cache_attr()
         assert ret.attrs.values["custom-testattr"] == "value"
+
+    @pytest.mark.asyncio_cooperative
+    async def test_attr_get_default(self, siyuan: Siyuan):
+        ret = await siyuan.get_block_by_id("20220501214630-ql8hhto")
+        assert await ret.attrs.get("custom-testattr-none") == ""
+        assert await ret.attrs.get("custom-testattr-none", "default") == "default"
