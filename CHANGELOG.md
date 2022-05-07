@@ -2,7 +2,11 @@
 
 See [keep-a-changelog](https://github.com/olivierlacan/keep-a-changelog).
 
-## Unreleased
+Version numbers follow [semantic versioning](https://semver.org).
+
+## v0.2.0
+
+### Added
 
 - Export Markdown Content
 

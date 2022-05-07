@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "siyuanhelper"
-version = "0.1.0"
+version = "0.2.0"
 description = "Helper lib for Siyuan Note"
 authors = ["clouder <clouder0@outlook.com>"]
 license = "MIT"
