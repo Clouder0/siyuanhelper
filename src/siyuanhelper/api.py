@@ -268,6 +268,18 @@ class SiyuanBlock:
         self.source = source
         self.raw = raw
         self.attrs = BlockAttr(self)
+        self._tags: tuple[str, ...] | None = None
+
+    async def tags(self) -> tuple[str, ...]:
+        """Return the tags tuple of the block. Note that if the Block hasn't been loaded, this function will pull the block from API.
+
+        Returns:
+            tuple[str]: tag tuple, such as `("tag1", "tag2")`
+        """
+        if self._tags is None:
+            await self.ensure()
+            self._tags = tuple(x.strip("#") for x in self.raw.tag.split(" "))
+        return self._tags
 
     async def pull(self) -> None:
         """Pull from Siyuan API. Refreshing everything."""
@@ -346,6 +358,7 @@ block_fields = (
     "subtype",
     "type",
     "ial",
+    "tag",
 )
 
 
@@ -375,3 +388,4 @@ class RawSiyuanBlock:
     subtype: str
     type: str
     ial: str
+    tag: str

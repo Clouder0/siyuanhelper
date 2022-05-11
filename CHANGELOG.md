@@ -7,6 +7,7 @@ Version numbers follow [semantic versioning](https://semver.org).
 ## Unreleased
 
 - support default value in BlockAttr.get()
+- add tags() in SiyuanBlock and tag in RawSiyuanBlock
 
 ## v0.2.0
 

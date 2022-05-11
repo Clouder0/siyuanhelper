@@ -41,6 +41,7 @@ class TestSiyuan:
             "subtype": "",
             "type": "p",
             "updated": "20220501134155",
+            "tag": "",
         }
 
     @pytest.mark.asyncio_cooperative
@@ -77,6 +78,7 @@ class TestSiyuan:
             "subtype": "",
             "type": "p",
             "updated": "20220501134155",
+            "tag": "",
         }
 
         def init_raw():
@@ -108,6 +110,7 @@ class TestSiyuan:
             "subtype": "",
             "type": "p",
             "updated": "20220501134155",
+            "tag": "",
         }
 
         def init_filtered_raw():
@@ -174,6 +177,12 @@ class TestSiyuanBlock:
             ret
             == "**content1**\n\n*content2*\n\n## Header 2\n\ncontent 3\n\ncontent 4\n"
         )
+
+    @pytest.mark.asyncio_cooperative
+    async def test_tags(self, siyuan: Siyuan):
+        block = await siyuan.get_block_by_id("20220501231358-j4mnnht")
+        tags = await block.tags()
+        assert tags == ("tag", "tag2")
 
 
 class TestBlockAttr:
