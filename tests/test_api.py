@@ -181,8 +181,8 @@ class TestSiyuanBlock:
     @pytest.mark.asyncio_cooperative
     async def test_tags(self, siyuan: Siyuan):
         block = await siyuan.get_block_by_id("20220501231358-j4mnnht")
-        tags = await block.tags()
-        assert tags == ("tag", "tag2")
+        assert (await block.tags) == ("tag", "tag2")
+        assert (await block.tags) == ("tag", "tag2")  # test cache
 
 
 class TestBlockAttr:
@@ -204,9 +204,8 @@ class TestBlockAttr:
     @pytest.mark.asyncio_cooperative
     async def test_cache(self, siyuan: Siyuan):
         ret = await siyuan.get_block_by_id("20220501214630-ql8hhto")
-        assert ret.attrs.cached is False
-        await ret.attrs._cache_attr()
-        assert ret.attrs.values["custom-testattr"] == "value"
+        assert (await ret.attrs.values)["custom-testattr"] == "value"
+        assert (await ret.attrs.values)["custom-testattr"] == "value"
 
     @pytest.mark.asyncio_cooperative
     async def test_attr_get_default(self, siyuan: Siyuan):

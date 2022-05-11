@@ -9,6 +9,7 @@ from typing import Any, Union, cast
 
 import aiohttp
 
+from asyncstdlib import cached_property
 from siyuanhelper import exceptions
 
 
@@ -210,16 +211,15 @@ class BlockAttr:
             block (SiyuanBlock): block that this BlockAttr adhere to.
         """
         self.block = block
-        self.cached = False
 
-    async def _cache_attr(self) -> None:
-        self.values = await self.block.source.get_attrs_by_id(self.block.id)
-        self.cached = True
+    @cached_property
+    async def values(self) -> dict[str, str]:
+        """Return the dictionary of the attributes. Cached.
 
-    async def ensure(self) -> None:
-        """Ensure the attributes are cached."""
-        if not self.cached:
-            await self._cache_attr()
+        Returns:
+            dict[str, str]: dict of attributes.
+        """
+        return await self.block.source.get_attrs_by_id(self.block.id)
 
     async def get(self, name: str, default: str = "") -> str:
         """Get attribute value by name.
@@ -231,8 +231,7 @@ class BlockAttr:
         Returns:
             str: the value of the attribute, default if not found.
         """
-        await self.ensure()
-        return self.values.get(name, default)
+        return (await self.values).get(name, default)
 
     async def set(self, name: str, val: str) -> None:
         """Modify the attribute.
@@ -241,9 +240,8 @@ class BlockAttr:
             name (str): name of the attribute
             val (str): new value
         """
-        await self.ensure()
-        self.values[name] = val
         await self.block.source.set_attrs_by_id(self.block.id, {name: val})
+        del self.values
 
 
 class DataType(str, Enum):
@@ -268,29 +266,26 @@ class SiyuanBlock:
         self.source = source
         self.raw = raw
         self.attrs = BlockAttr(self)
-        self._tags: tuple[str, ...] | None = None
 
+    @cached_property
     async def tags(self) -> tuple[str, ...]:
         """Return the tags tuple of the block. Note that if the Block hasn't been loaded, this function will pull the block from API.
 
         Returns:
             tuple[str]: tag tuple, such as `("tag1", "tag2")`
         """
-        if self._tags is None:
-            await self.ensure()
-            self._tags = tuple(x.strip("#") for x in self.raw.tag.split(" "))
-        return self._tags
+        await self.ensure()
+        return tuple(x.strip("#") for x in self.raw.tag.split(" "))
 
     async def pull(self) -> None:
         """Pull from Siyuan API. Refreshing everything."""
         self.raw = await self.source._get_raw_block_by_id(self.id)
-        await self.attrs._cache_attr()
+        await self.attrs.values
 
     async def ensure(self) -> None:
         """Ensure the information of the current block is cached."""
         if self.raw is None:
             self.raw = await self.source._get_raw_block_by_id(self.id)
-        await self.attrs.ensure()
 
     def asdict(self) -> dict:
         """Parse Siyuan Block to a dict containing all its informations.

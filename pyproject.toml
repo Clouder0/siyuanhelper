@@ -25,6 +25,7 @@ documentation = "https://clouder0.github.io/siyuanhelper"
 python = ">=3.8, < 4.0"
 aiohttp = "^3.8.1"
 cchardet = "^2.1.7"
+asyncstdlib = "^3.10.4"
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.950"

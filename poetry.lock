@@ -46,6 +46,18 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
+name = "asyncstdlib"
+version = "3.10.4"
+description = "The missing async toolbox"
+category = "main"
+optional = false
+python-versions = "~=3.6"
+
+[package.extras]
+doc = ["sphinx", "sphinxcontrib-trio"]
+test = ["pytest", "flake8", "flake8-bugbear", "black", "coverage", "pytest-cov", "flake8-2020", "mypy"]
+
+[[package]]
 name = "atomicwrites"
 version = "1.4.0"
 description = "Atomic file writes."
@@ -210,7 +222,7 @@ dev = ["coverage", "hypothesis", "hypothesmith (>=0.2)", "pre-commit"]
 
 [[package]]
 name = "flake8-comprehensions"
-version = "3.8.0"
+version = "3.9.0"
 description = "A flake8 plugin to help you write better list/set/dict comprehensions."
 category = "dev"
 optional = false
@@ -476,7 +488,7 @@ mkdocs = ">=1.0"
 
 [[package]]
 name = "mkdocs-material"
-version = "8.2.13"
+version = "8.2.14"
 description = "Documentation that simply works"
 category = "dev"
 optional = false
@@ -689,7 +701,7 @@ markdown = ">=3.2"
 
 [[package]]
 name = "pyparsing"
-version = "3.0.8"
+version = "3.0.9"
 description = "pyparsing module - Classes and methods to define and execute parsing grammars"
 category = "dev"
 optional = false
@@ -947,7 +959,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8, < 4.0"
-content-hash = "6a545eeeac1e83c3dad28191694bcbf612ffb07a69cce82ef39fb9d4e2940eb6"
+content-hash = "7eea48451f28035bee78e8217abee25e82f0e6751d9eec219dc5aece071f70aa"
 
 [metadata.files]
 aiohttp = [
@@ -1035,6 +1047,10 @@ astor = [
 async-timeout = [
     {file = "async-timeout-4.0.2.tar.gz", hash = "sha256:2163e1640ddb52b7a8c80d0a67a08587e5d245cc9c553a74a847056bc2976b15"},
     {file = "async_timeout-4.0.2-py3-none-any.whl", hash = "sha256:8ca1e4fcf50d07413d66d1a5e416e42cfdf5851c981d679a09851a6853383b3c"},
+]
+asyncstdlib = [
+    {file = "asyncstdlib-3.10.4-py2.py3-none-any.whl", hash = "sha256:b291491a22a5fb1fa6785fc6762d9819fec8636ff3d88334edc8faeaf5e93763"},
+    {file = "asyncstdlib-3.10.4.tar.gz", hash = "sha256:8367c218ace639814f6c5c6a359cc11878ee75f9eac1edc4142cd930050c973d"},
 ]
 atomicwrites = [
     {file = "atomicwrites-1.4.0-py2.py3-none-any.whl", hash = "sha256:6d1784dea7c0c8d4a5172b6c620f40b6e4cbfdf96d783691f2e1302a7b88e197"},
@@ -1180,8 +1196,8 @@ flake8-bugbear = [
     {file = "flake8_bugbear-22.4.25-py3-none-any.whl", hash = "sha256:ec374101cddf65bd7a96d393847d74e58d3b98669dbf9768344c39b6290e8bd6"},
 ]
 flake8-comprehensions = [
-    {file = "flake8-comprehensions-3.8.0.tar.gz", hash = "sha256:8e108707637b1d13734f38e03435984f6b7854fa6b5a4e34f93e69534be8e521"},
-    {file = "flake8_comprehensions-3.8.0-py3-none-any.whl", hash = "sha256:9406314803abe1193c064544ab14fdc43c58424c0882f6ff8a581eb73fc9bb58"},
+    {file = "flake8-comprehensions-3.9.0.tar.gz", hash = "sha256:20c2f6846090e8f265e757f0aa500614c88b0f9ffb0d954d330dcd8abd8f874e"},
+    {file = "flake8_comprehensions-3.9.0-py3-none-any.whl", hash = "sha256:ef3a069809d4eb60805cd9b0ea2aa1aae21b527a460e704c01e0dd3416c99aeb"},
 ]
 flake8-isort = [
     {file = "flake8-isort-4.1.1.tar.gz", hash = "sha256:d814304ab70e6e58859bc5c3e221e2e6e71c958e7005239202fee19c24f82717"},
@@ -1361,8 +1377,8 @@ mkdocs-git-revision-date-localized-plugin = [
     {file = "mkdocs_git_revision_date_localized_plugin-1.0.1-py3-none-any.whl", hash = "sha256:ffcf206b5108d9f729af6cd42377d2e0e25c080817fdad0119549ac924b526f3"},
 ]
 mkdocs-material = [
-    {file = "mkdocs-material-8.2.13.tar.gz", hash = "sha256:505408fe001d668543236f5db5a88771460ad83ef7b58826630cc1f8b7e63099"},
-    {file = "mkdocs_material-8.2.13-py2.py3-none-any.whl", hash = "sha256:2666f1d7d6a8dc28dda1e777f77add12799e66bd00250de99914a33525763816"},
+    {file = "mkdocs-material-8.2.14.tar.gz", hash = "sha256:413c349ef531ffe9f2eab6c8a71203fb0a7ebdc301ab9a2529ddd90c173673de"},
+    {file = "mkdocs_material-8.2.14-py2.py3-none-any.whl", hash = "sha256:072cbba38f95b1989118b76ad6e3b61f56c4a6215622c960adf2f2c65a613dba"},
 ]
 mkdocs-material-extensions = [
     {file = "mkdocs-material-extensions-1.0.3.tar.gz", hash = "sha256:bfd24dfdef7b41c312ede42648f9eb83476ea168ec163b613f9abd12bbfddba2"},
@@ -1517,8 +1533,8 @@ pymdown-extensions = [
     {file = "pymdown_extensions-9.4.tar.gz", hash = "sha256:1baa22a60550f731630474cad28feb0405c8101f1a7ddc3ec0ed86ee510bcc43"},
 ]
 pyparsing = [
-    {file = "pyparsing-3.0.8-py3-none-any.whl", hash = "sha256:ef7b523f6356f763771559412c0d7134753f037822dad1b16945b7b846f7ad06"},
-    {file = "pyparsing-3.0.8.tar.gz", hash = "sha256:7bf433498c016c4314268d95df76c81b842a4cb2b276fa3312cfb1e1d85f6954"},
+    {file = "pyparsing-3.0.9-py3-none-any.whl", hash = "sha256:5026bae9a10eeaefb61dab2f09052b9f4307d44aee4eda64b309723d8d206bbc"},
+    {file = "pyparsing-3.0.9.tar.gz", hash = "sha256:2b020ecf7d21b687f219b71ecad3631f644a47f01403fa1d1036b0c6416d70fb"},
 ]
 pytest = [
     {file = "pytest-7.1.2-py3-none-any.whl", hash = "sha256:13d0e3ccfc2b6e26be000cb6568c832ba67ba32e719443bfe725814d3c42433c"},
