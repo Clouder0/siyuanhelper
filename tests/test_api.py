@@ -138,7 +138,7 @@ class TestSiyuan:
         )
 
     @pytest.mark.asyncio_cooperative
-    async def test_create_doc_with_md(self, siyuan: Siyuan):
+    async def test_create_remove_document(self, siyuan: Siyuan):
         block = await siyuan.create_doc_with_md(
             "20220501134144-oqwd5yh", "/testfolder/testdoc", "test content\n\ntest2"
         )
@@ -146,6 +146,10 @@ class TestSiyuan:
         await block.ensure()
         content = await block.export()
         assert content == "test content\n\ntest2\n"
+        await siyuan.remove_doc("20220501134144-oqwd5yh", block.path)
+        await asyncio.sleep(4)
+        with pytest.raises(exceptions.SiyuanApiException):
+            await siyuan.get_hpath_by_id(block.id)
 
     @pytest.mark.asyncio_cooperative
     async def test_get_hpath_by_id(self, siyuan: Siyuan):

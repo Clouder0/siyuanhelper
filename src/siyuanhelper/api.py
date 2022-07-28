@@ -243,6 +243,15 @@ class Siyuan:
         )
         return cast(str, ret)
 
+    async def remove_doc(self, notebook_id: str, doc_path: str) -> None:
+        """Remove the target document.
+
+        Args:
+            notebook_id (str): notebook id which the document belongs to.
+            doc_path (str): path of the target document.
+        """
+        await self._post("/api/filetree/removeDoc", notebook=notebook_id, path=doc_path)
+
 
 @dataclass
 class SiyuanResponse:
