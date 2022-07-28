@@ -83,8 +83,12 @@ class Siyuan:
         """
         if not full:
             ret = await self.sql_query(f"SELECT id from BLOCKS {cond}")
+            if ret is None:
+                return []
             return [SiyuanBlock(id=x.id, source=self) for x in ret]
         ret = await self.sql_query(f"SELECT * from BLOCKS {cond}")
+        if ret is None:
+            return []
         return [
             SiyuanBlock(id=x["id"], source=self, raw=self._gen_block_by_sql_result(x))
             for x in ret
@@ -193,7 +197,7 @@ class Siyuan:
 
     async def create_doc_with_md(
         self, notebook_id: str, path: str, markdown: str
-    ) -> str:
+    ) -> SiyuanBlock:
         """Create a doc with markdown content.
 
         Args:
@@ -202,7 +206,7 @@ class Siyuan:
             markdown (str): the markdown content of the doc.
 
         Returns:
-            str: the id of the created doc
+            SiyuanBlock: the created document block, with only id field.
         """
         ret = await self._post(
             "/api/filetree/createDocWithMd",
@@ -210,7 +214,7 @@ class Siyuan:
             path=path,
             markdown=markdown,
         )
-        return cast(str, ret)
+        return await self.get_block_by_id(cast(str, ret), False)
 
 
 @dataclass
@@ -296,7 +300,7 @@ class SiyuanBlock:
             tuple[str]: tag tuple, such as `("tag1", "tag2")`
         """
         await self.ensure()
-        return tuple(x.strip("#") for x in self.raw.tag.split(" "))
+        return tuple(x.strip("#") for x in self.raw.tag.split(" "))  # type: ignore
 
     async def pull(self) -> None:
         """Pull from Siyuan API. Refreshing everything."""
