@@ -137,6 +137,16 @@ class TestSiyuan:
             and blocks[0].id == "20220501134156-v82db6e"
         )
 
+    @pytest.mark.asyncio_cooperative
+    async def test_create_doc_with_md(self, siyuan: Siyuan):
+        id = await siyuan.create_doc_with_md(
+            "20220501134144-oqwd5yh", "/testfolder/testdoc", "test content\n\ntest2"
+        )
+        await asyncio.sleep(4)
+        block = await siyuan.get_block_by_id(id)
+        content = await block.export()
+        assert content == "test content\n\ntest2\n"
+
 
 class TestSiyuanBlock:
     @pytest.mark.asyncio_cooperative

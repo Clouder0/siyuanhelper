@@ -191,6 +191,27 @@ class Siyuan:
             "content"
         ]
 
+    async def create_doc_with_md(
+        self, notebook_id: str, path: str, markdown: str
+    ) -> str:
+        """Create a doc with markdown content.
+
+        Args:
+            notebook_id (str): id of the notebook where the doc is to be created
+            path (str): path of the doc, eg. '/foo/bar'
+            markdown (str): the markdown content of the doc.
+
+        Returns:
+            str: the id of the created doc
+        """
+        ret = await self._post(
+            "/api/filetree/createDocWithMd",
+            notebook=notebook_id,
+            path=path,
+            markdown=markdown,
+        )
+        return cast(str, ret)
+
 
 @dataclass
 class SiyuanResponse:
