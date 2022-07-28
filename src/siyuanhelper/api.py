@@ -216,6 +216,33 @@ class Siyuan:
         )
         return await self.get_block_by_id(cast(str, ret), False)
 
+    async def get_hpath_by_id(self, doc_id: str) -> str:
+        """Get readable path by Document id.
+
+        Args:
+            doc_id (str): the id of the document.
+
+        Returns:
+            str: human readable path of the document.
+        """
+        ret = await self._post("/api/filetree/getHPathByID", id=doc_id)
+        return cast(str, ret)
+
+    async def get_hpath_by_path(self, notebook_id: str, doc_path: str) -> str:
+        """Get doc's readable path by raw path.
+
+        Args:
+            notebook_id (str): the id of the notebook where document locates.
+            doc_path (str): raw path, eg. '/20220728220136-wi8vton/20220728223910-bkzr0sb.sy'
+
+        Returns:
+            str: human readable path.
+        """
+        ret = await self._post(
+            "/api/filetree/getHPathByPath", notebook=notebook_id, path=doc_path
+        )
+        return cast(str, ret)
+
 
 @dataclass
 class SiyuanResponse:

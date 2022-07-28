@@ -147,6 +147,19 @@ class TestSiyuan:
         content = await block.export()
         assert content == "test content\n\ntest2\n"
 
+    @pytest.mark.asyncio_cooperative
+    async def test_get_hpath_by_id(self, siyuan: Siyuan):
+        hpath = await siyuan.get_hpath_by_id("20220728223630-00qikyt")
+        assert hpath == "/testfolder/testhpathbyid"
+
+    @pytest.mark.asyncio_cooperative
+    async def test_get_hpath_by_path(self, siyuan: Siyuan):
+        hpath = await siyuan.get_hpath_by_path(
+            "20220501134144-oqwd5yh",
+            "/20220728220136-wi8vton/20220728223910-bkzr0sb.sy",
+        )
+        assert hpath == "/testfolder/hpath by path"
+
 
 class TestSiyuanBlock:
     @pytest.mark.asyncio_cooperative
@@ -171,11 +184,11 @@ class TestSiyuanBlock:
     async def test_insert_delete(self, siyuan: Siyuan):
         ret = await siyuan.get_block_by_id("20220501134149-qexauwn")
         inserted = await ret.insert(DataType.MARKDOWN, "test insert")
-        await asyncio.sleep(4)
+        await asyncio.sleep(5)
         await inserted.ensure()
         assert inserted.markdown == "test insert"
         await inserted.delete()
-        await asyncio.sleep(4)
+        await asyncio.sleep(5)
         with pytest.raises(exceptions.SiyuanNoResultException):
             await siyuan.get_block_by_id(inserted.id)
 
