@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import random
 
 import pytest
 import siyuanhelper.api
@@ -152,6 +153,12 @@ class TestSiyuan:
             await siyuan.get_hpath_by_id(block.id)
 
     @pytest.mark.asyncio_cooperative
+    async def test_get_doc_path_by_id(self, siyuan: Siyuan):
+        doc = await siyuan.get_doc_path_by_id("20220728223910-bkzr0sb")
+        assert doc["box"] == "20220501134144-oqwd5yh"
+        assert doc["path"] == "/20220728220136-wi8vton/20220728223910-bkzr0sb.sy"
+
+    @pytest.mark.asyncio_cooperative
     async def test_get_hpath_by_id(self, siyuan: Siyuan):
         hpath = await siyuan.get_hpath_by_id("20220728223630-00qikyt")
         assert hpath == "/testfolder/testhpathbyid"
@@ -163,6 +170,17 @@ class TestSiyuan:
             "/20220728220136-wi8vton/20220728223910-bkzr0sb.sy",
         )
         assert hpath == "/testfolder/hpath by path"
+
+    @pytest.mark.asyncio_cooperative
+    async def test_rename_doc(self, siyuan: Siyuan):
+        doc = await siyuan.get_doc_path_by_id("20220808150136-2h756le")
+        rd = str(random.randint(0, 100))
+        await siyuan.rename_doc(doc["box"], doc["path"], "renamed" + rd)
+        await asyncio.sleep(5)
+        content = await siyuan.sql_query(
+            f"select content from blocks where path='{doc['path']}'"
+        )
+        assert content[0]["content"] == "renamed" + rd
 
 
 class TestSiyuanBlock:

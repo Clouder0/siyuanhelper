@@ -216,6 +216,20 @@ class Siyuan:
         )
         return await self.get_block_by_id(cast(str, ret), False)
 
+    async def get_doc_path_by_id(self, doc_id: str) -> dict:
+        """Get the notebook_id and raw path from document id.
+
+        Args:
+            doc_id (str): the target document id.
+
+        Returns:
+            dict: {box: notebook_id, path: raw path}
+        """
+        ret = (
+            await self.sql_query(f"SELECT box, path FROM blocks WHERE id='{doc_id}'")
+        )[0]
+        return ret
+
     async def get_hpath_by_id(self, doc_id: str) -> str:
         """Get readable path by Document id.
 
@@ -251,6 +265,18 @@ class Siyuan:
             doc_path (str): path of the target document.
         """
         await self._post("/api/filetree/removeDoc", notebook=notebook_id, path=doc_path)
+
+    async def rename_doc(self, notebook_id: str, path: str, new_title: str) -> None:
+        """Rename the target document.
+
+        Args:
+            notebook_id (str): notebook id where the doc locates.
+            path (str): the raw path of the target document.
+            new_title (str): new title of the document.
+        """
+        await self._post(
+            "/api/filetree/renameDoc", notebook=notebook_id, path=path, title=new_title
+        )
 
 
 @dataclass
