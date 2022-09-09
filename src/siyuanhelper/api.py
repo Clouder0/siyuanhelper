@@ -225,8 +225,9 @@ class Siyuan:
         Returns:
             dict: {box: notebook_id, path: raw path}
         """
-        ret = (
-            await self.sql_query(f"SELECT box, path FROM blocks WHERE id='{doc_id}'")
+        ret = cast(
+            list,
+            (await self.sql_query(f"SELECT box, path FROM blocks WHERE id='{doc_id}'")),
         )[0]
         return ret
 
@@ -266,17 +267,36 @@ class Siyuan:
         """
         await self._post("/api/filetree/removeDoc", notebook=notebook_id, path=doc_path)
 
-    async def rename_doc(self, notebook_id: str, path: str, new_title: str) -> None:
-        """Rename the target document.
+    # async def rename_doc(self, notebook_id: str, path: str, new_title: str) -> None:
+    #     """Rename the target document.
 
-        Args:
-            notebook_id (str): notebook id where the doc locates.
-            path (str): the raw path of the target document.
-            new_title (str): new title of the document.
-        """
-        await self._post(
-            "/api/filetree/renameDoc", notebook=notebook_id, path=path, title=new_title
-        )
+    #     Args:
+    #         notebook_id (str): notebook id where the doc locates.
+    #         path (str): the raw path of the target document.
+    #         new_title (str): new title of the document.
+    #     """
+    #     await self._post(
+    #         "/api/filetree/renameDoc", notebook=notebook_id, path=path, title=new_title
+    #     )
+
+    # async def move_doc(
+    #     self, notebook_id1: str, path1: str, notebook_id2: str, path2: str
+    # ) -> None:
+    #     """Move the target document to a new location.
+
+    #     Args:
+    #         notebook_id1 (str): the old document notebook.
+    #         path1 (str): old path.
+    #         notebook_id2 (str): new notebook id.
+    #         path2 (str): new dir path. eg. `"/20220808153741-sf7rb5j/"`
+    #     """
+    #     await self._post(
+    #         "/api/filetree/moveDoc",
+    #         fromNotebook=notebook_id1,
+    #         fromPath=path1,
+    #         toNotebook=notebook_id2,
+    #         toPath=path2,
+    #     )
 
 
 @dataclass

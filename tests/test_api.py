@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import asyncio
-import random
 
 import pytest
 import siyuanhelper.api
@@ -171,16 +170,34 @@ class TestSiyuan:
         )
         assert hpath == "/testfolder/hpath by path"
 
-    @pytest.mark.asyncio_cooperative
-    async def test_rename_doc(self, siyuan: Siyuan):
-        doc = await siyuan.get_doc_path_by_id("20220808150136-2h756le")
-        rd = str(random.randint(0, 100))
-        await siyuan.rename_doc(doc["box"], doc["path"], "renamed" + rd)
-        await asyncio.sleep(5)
-        content = await siyuan.sql_query(
-            f"select content from blocks where path='{doc['path']}'"
-        )
-        assert content[0]["content"] == "renamed" + rd
+    # @pytest.mark.asyncio_cooperative
+    # async def test_rename_doc(self, siyuan: Siyuan):
+    #     doc = await siyuan.get_doc_path_by_id("20220808150136-2h756le")
+    #     rd = str(random.randint(0, 100))
+    #     await siyuan.rename_doc(doc["box"], doc["path"], "renamed" + rd)
+    #     await asyncio.sleep(5)
+    #     content = await siyuan.sql_query(
+    #         f"select content from blocks where path='{doc['path']}'"
+    #     )
+    #     assert content[0]["content"] == "renamed" + rd
+
+    # @pytest.mark.asyncio_cooperative
+    # async def test_move_doc(self, siyuan: Siyuan):
+    #     await siyuan.move_doc(
+    #         "20220501134144-oqwd5yh",
+    #         "/20220808153645-lzljvgw.sy",
+    #         "20220501134144-oqwd5yh",
+    #         "/20220808153741-sf7rb5j/",
+    #     )
+    #     await asyncio.sleep(5)
+    #     doc = await siyuan.get_doc_path_by_id("20220808153645-lzljvgw")
+    #     assert doc["path"] == "/20220808153741-sf7rb5j/20220808153645-lzljvgw.sy"
+    #     await siyuan.move_doc(
+    #         "20220501134144-oqwd5yh",
+    #         "/20220808153741-sf7rb5j/20220808153645-lzljvgw.sy",
+    #         "20220501134144-oqwd5yh",
+    #         "/",
+    #     )
 
 
 class TestSiyuanBlock:
