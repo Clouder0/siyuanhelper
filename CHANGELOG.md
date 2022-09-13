@@ -6,8 +6,15 @@ Version numbers follow [semantic versioning](https://semver.org).
 
 ## Unreleased
 
+## v0.3.0
+
 - support default value in BlockAttr.get()
 - add tags() in SiyuanBlock and tag in RawSiyuanBlock
+- cached property
+- add create_doc_with_md
+- add get_hpath_by_id/path
+- add remove_doc
+- add parent & son suuport
 
 ## v0.2.0
 
