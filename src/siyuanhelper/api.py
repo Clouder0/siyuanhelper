@@ -71,7 +71,7 @@ class Siyuan:
 
     async def get_blocks_by_sql(
         self, cond: str, full: bool = True
-    ) -> list[SiyuanBlock]:
+    ) -> tuple[SiyuanBlock, ...]:
         """Get a list of SiyuanBlock by sql.
 
         Args:
@@ -79,20 +79,20 @@ class Siyuan:
             full (bool, optional): whether to fetch all the informations of the block. Defaults to True.
 
         Returns:
-            list[SiyuanBlock]: result blocks
+            tuple[SiyuanBlock, ...]: result blocks
         """
         if not full:
             ret = await self.sql_query(f"SELECT id from BLOCKS {cond}")
             if ret is None:
-                return []
-            return [SiyuanBlock(id=x.id, source=self) for x in ret]
+                return ()
+            return tuple(SiyuanBlock(id=x["id"], source=self) for x in ret)
         ret = await self.sql_query(f"SELECT * from BLOCKS {cond}")
         if ret is None:
-            return []
-        return [
+            return ()
+        return tuple(
             SiyuanBlock(id=x["id"], source=self, raw=self._gen_block_by_sql_result(x))
             for x in ret
-        ]
+        )
 
     def _gen_block_by_sql_result(self, result: dict) -> RawSiyuanBlock:
         # use block_fields filter to avoid compatibility issues.
@@ -147,6 +147,19 @@ class Siyuan:
             data_type: usually a list of dicts.
         """
         return await self._post(url="/api/query/sql", stmt=sql)
+
+    async def get_parent_id_by_id(self, id: str) -> str:
+        """Query the Parent Id of a block.
+
+        Args:
+            id (str): target block id.
+
+        Returns:
+            str: Parent block id.
+        """
+        return (await self.sql_query(f"SELECT parent_id FROM blocks WHERE id='{id}'"))[
+            0
+        ]["parent_id"]
 
     async def delete_block_by_id(self, block_id: str) -> None:
         """Delete a block with given id.
@@ -383,6 +396,29 @@ class SiyuanBlock:
         """
         await self.ensure()
         return tuple(x.strip("#") for x in self.raw.tag.split(" "))  # type: ignore
+
+    @cached_property
+    async def parent(self) -> SiyuanBlock | None:
+        """Get the parent block of the current block.
+
+        Returns:
+            SiyuanBlock | None: Parent block. None if current block is root.
+        """
+        pid = await self.source.get_parent_id_by_id(self.id)
+        if pid == "":
+            return None
+        return await self.source.get_block_by_id(pid, False)
+
+    @cached_property
+    async def sons(self) -> tuple[SiyuanBlock, ...]:
+        """Get a tuple of blocks whose parent is the current block.
+
+        Returns:
+            tuple[SiyuanBlock, ...]: sons of the current block.
+        """
+        return await self.source.get_blocks_by_sql(
+            f"WHERE parent_id='{self.id}'", False
+        )
 
     async def pull(self) -> None:
         """Pull from Siyuan API. Refreshing everything."""

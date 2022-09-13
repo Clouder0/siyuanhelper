@@ -170,6 +170,11 @@ class TestSiyuan:
         )
         assert hpath == "/testfolder/hpath by path"
 
+    @pytest.mark.asyncio_cooperative
+    async def test_get_parent_id_by_id(self, siyuan: Siyuan):
+        parent_id = await siyuan.get_parent_id_by_id("20220501134149-qexauwn")
+        assert parent_id == "20220501134149-eafvjwu"
+
     # @pytest.mark.asyncio_cooperative
     # async def test_rename_doc(self, siyuan: Siyuan):
     #     doc = await siyuan.get_doc_path_by_id("20220808150136-2h756le")
@@ -274,3 +279,17 @@ class TestBlockAttr:
         ret = await siyuan.get_block_by_id("20220501214630-ql8hhto")
         assert await ret.attrs.get("custom-testattr-none") == ""
         assert await ret.attrs.get("custom-testattr-none", "default") == "default"
+
+    @pytest.mark.asyncio_cooperative
+    async def test_get_parent(self, siyuan: Siyuan):
+        ret = await siyuan.get_block_by_id("20220501134149-qexauwn")
+        pa = await ret.parent
+        assert pa.id == "20220501134149-eafvjwu"
+
+    @pytest.mark.asyncio_cooperative
+    async def test_get_sons(self, siyuan: Siyuan):
+        block = await siyuan.get_block_by_id("20220728223628-en9be7r")
+        sons = await block.sons
+        son_ids = [x.id for x in sons]
+        assert "20220909163636-mr190sz" in son_ids
+        assert "20220909163636-q2maalx" in son_ids
