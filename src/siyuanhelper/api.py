@@ -1,4 +1,5 @@
 """main API module."""
+
 from __future__ import annotations
 
 import dataclasses
@@ -11,7 +12,6 @@ import aiohttp
 
 from asyncstdlib import cached_property
 from siyuanhelper import exceptions
-
 
 data_type = Union[dict, list, None]
 

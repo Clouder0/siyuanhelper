@@ -1,6 +1,5 @@
 """Exception Module for Siyuan Helper."""
 
-
 from __future__ import annotations
 
 
